@@ -16,6 +16,7 @@
 	$filePath1 = "/websites/secure/www/users.txt";
 	$filePath2 = "/websites/secure/www/init1.txt";
 	$filePath3 = "/websites/secure/www/index.json";
+	$filePath4 = "/websites/secure/www/status.txt";
 	if(file_exists($filePath1)) {
 		if(filesize($filePath1) <= 1){
 			//Register
@@ -66,6 +67,11 @@
 				echo $d ;
 				fflush($fh3);
 				fclose($fh3);
+				$fh4 = fopen($filePath4, 'w+');
+				fwrite($fh4, "1");
+				fflush($fh4);
+				fclose($fh4);
+				//shell_exec('python /websites/secure/www/watchdog.py &');
 			}
 			else{
 				echo "1";
