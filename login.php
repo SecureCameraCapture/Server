@@ -1,6 +1,6 @@
 <?php
 	function salt() {
-		$chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[{}]\|<>.?/';
+		$chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^()[{}]\|<>';
 		$salt = "";
 		$length = 30;
 
@@ -56,7 +56,7 @@
 			$hu1 = hash("sha256", ($s1 . $userName . $s2), FALSE);
 			$hp1 = hash("sha256", ($s2 . $password . $s1), FALSE);
 
-			if($u == $hu1 && $p == $hp1){
+			if($u == $hu1 && $p == $hp1 && !file_exists("status.txt")){
 				echo "0";
 				//echo "Login Successful";
 				//$fh2 = fopen($filePath3, 'r');
@@ -64,18 +64,23 @@
 				//echo $d ;
 				$fh3 = fopen($filePath3, 'r');
 				$d = fread($fh3, filesize($filePath3));
+				$key = salt();
+				echo $key . ",";
 				echo $d ;
 				fflush($fh3);
 				fclose($fh3);
 				$fh4 = fopen($filePath4, 'w+');
-				fwrite($fh4, "1");
+				fwrite($fh4, $key);
 				fflush($fh4);
 				fclose($fh4);
 				//shell_exec('python /websites/secure/www/watchdog.py &');
 			}
+			elseif(file_exists("status.txt")){
+				echo "-1";
+				//echo "Try again";
+			}
 			else{
 				echo "1";
-				//echo "Try again";
 			}
 		}
 	}
@@ -110,6 +115,7 @@
 				//	</table></form>';
 				//touch the users.txt file
 				$fh1 = fopen( $filePath1, 'w+');
+				echo $fh1;
 				fwrite($fh1, 'a');
 				fclose($fh1);
 				//echo 'success';

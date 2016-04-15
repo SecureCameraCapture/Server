@@ -1,8 +1,11 @@
 <?php
 	$check = "/websites/secure/www/status.txt";
 	$fh = fopen($check, "r");
-	$l = fread($fh, 1);
-	if ($l == "1")
+	$l = fread($fh, filesize($check));
+	$key = $_POST['key'];
+
+
+	if (strcmp($l, $key) == 0)
 	{
 		$file = '/images/'. $_POST['picture'];
 		if ($_POST['type'] == 0)
@@ -32,6 +35,9 @@
 			echo $image_data_64;
 		}
 	}
-	else
-		echo "Bummer";
+	else{
+		echo $key ;
+		echo "     ";
+		echo $l;
+	}
 ?>
