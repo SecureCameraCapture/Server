@@ -1,31 +1,25 @@
-import receive, random, socket, ssl, datetime, encrypt
+import receive, random, socket, ssl, datetime, encrypt, os
 def deal_with_client(connstream):
 
    data = connstream.read()
    imageData =  "%4d%02d%02d%02d%02d0" %(datetime.datetime.now().year,  datetime.datetime.now().month,  datetime.datetime.now().day,  datetime.datetime.now().hour,  datetime.datetime.now().minute)
    imageName =  "%4d%02d%02d%02d%02d%02d%s0.jpg" %(datetime.datetime.now().year,  datetime.datetime.now().month,  datetime.datetime.now().day,  datetime.datetime.now().hour,  datetime.datetime.now().minute, datetime.datetime.now().second, random.choice('abcdefghijklmnopqrstuvwxyz'))
    location = '/images/'+ imageName
+   location2 = '/websites/secure/www/'+ imageName
    # null data means the client is finished with us
-   f = open(location, 'wb')
+   f = open(location2, 'wb')
    print "WOOOHOOO BITS BITS BITS"
-   #string = ""
-   #while data:
-       #string+=data
-       #data = connstream.read()
-   #encode = encrypt.encode(string)
-   #f.write(encode)
    
    while data:
       # print bytearray(data)
       f.write(data)
       data = connstream.read()
-   # finished with client
-   #image = bytearray(data)
-   #string = image.decode("utf-8")
-   #encode = encrypt.encode(string)
+
    f.write(data)
    f.close()
+   encrypt.encode(location2, location)
    receive.receive(imageData, imageName)
+   os.remove(location2)
    connstream.close()
 
 def do_something(connstream, date):
