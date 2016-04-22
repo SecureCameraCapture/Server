@@ -56,28 +56,35 @@
 			$hu1 = hash("sha256", ($s1 . $userName . $s2), FALSE);
 			$hp1 = hash("sha256", ($s2 . $password . $s1), FALSE);
 
-			if($u == $hu1 && $p == $hp1 && !file_exists("status.txt")){
-				echo "0";
-				//echo "Login Successful";
-				//$fh2 = fopen($filePath3, 'r');
-				//$d = fread($fh2, filesize($filePath3));
-				//echo $d ;
-				$fh3 = fopen($filePath3, 'r');
-				$d = fread($fh3, filesize($filePath3));
-				$key = salt();
-				echo $key . ",";
-				echo $d ;
-				fflush($fh3);
-				fclose($fh3);
-				$fh4 = fopen($filePath4, 'w+');
-				fwrite($fh4, $key);
-				fflush($fh4);
-				fclose($fh4);
-				//shell_exec('python /websites/secure/www/watchdog.py &');
-			}
-			elseif(file_exists("status.txt")){
-				echo "-1";
-				//echo "Try again";
+			if($u == $hu1 && $p == $hp1){
+				if(!file_exists("status.txt")){
+					echo "0";
+					$fh3 = fopen($filePath3, 'r');
+					$d = fread($fh3, filesize($filePath3));
+					$key = salt();
+					echo $key . ",";
+					echo $d ;
+					fflush($fh3);
+					fclose($fh3);
+					$fh4 = fopen($filePath4, 'w+');
+					fwrite($fh4, ($key . ","));
+					fflush($fh4);
+					fclose($fh4);
+				}
+				else{
+					echo "0";
+					$fh3 = fopen($filePath3, 'r');
+					$d = fread($fh3, filesize($filePath3));
+					$key = salt();
+					echo $key . ",";
+					echo $d;
+					fflush($fh3);
+					fclose($fh3);
+					$fh4 = fopen($filePath4, 'a');
+					fwrite($fh4, ($key . ","));
+					fflush($fh4);
+					fclose($fh4);
+				}
 			}
 			else{
 				echo "1";
